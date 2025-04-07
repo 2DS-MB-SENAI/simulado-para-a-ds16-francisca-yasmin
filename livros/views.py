@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import BibliotecaSerializer #mudar pra JSON
+from .serializers import LivroSerializer #mudar pra JSON
 from .models import Livro
 from rest_framework.decorators import api_view #importando o decorador
 from rest_framework.response import Response
@@ -20,11 +20,11 @@ def read_livros(request):
         except Livro.DoesNotExist:
             return Response({'erro': 'livro não existe'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = BibliotecaSerializer(livro, many=True)
+        serializer = LivroSerializer(livro, many=True)
         return Response(serializer.data)
     
     if request.method == 'POST':
-        serializer = BibliotecaSerializer(data=request.data)
+        serializer = LivroSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
