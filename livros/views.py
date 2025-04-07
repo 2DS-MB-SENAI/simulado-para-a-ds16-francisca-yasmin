@@ -12,21 +12,24 @@ def listar_livros(request):
 
 # task 2 - listar os livros e adicionar os livros
 #listar meus livros cadastrados
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def read_livros(request):
-    livros = Livro.objects.all()
-    serializer = BibliotecaSerializer(livros, many=True)
-    return Response(serializer.data)
-
-#criar um livro
-@api_view(['POST'])
-def create_livros(request):
+    if request.method == 'GET':
+        try:
+            livro = Livro.objects.all()
+        except Livro.DoesNotExist:
+            return Response({'erro': 'livro não existe'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = BibliotecaSerializer(livro, many=True)
+        return Response(serializer.data)
+    
     if request.method == 'POST':
         serializer = BibliotecaSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 
     
