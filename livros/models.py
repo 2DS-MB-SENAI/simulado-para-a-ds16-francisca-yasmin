@@ -7,5 +7,5 @@ class Biblioteca(models.Model):
 	autor = models.CharField(max_length=30)
 	paginas = IntegerField()
 		
-	def str(self):
+	def __str__(self):
 		return self.titulo
